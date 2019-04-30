@@ -12,5 +12,20 @@ class currency(ABC) :
   def get_value(self, exchange):
     pass
     
-#class exchange(ABC) :
-#TODO
+class exchange(ABC) :
+    
+    @abstractmethod
+    def buy(coin, amount):
+        pass
+    
+    @abstractmethod
+    def sell(coin, amount):
+        pass
+    
+    @abstractmethod
+    def trade(coin1, coin2, amount):
+        pass
+    
+    @abstractmethod
+    def checkCoinValue(coin):
+        pass
