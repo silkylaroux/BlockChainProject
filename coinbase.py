@@ -16,8 +16,8 @@ def get_spread(coin1, coin2=stable_coin):
     }
     if coin1 == stable_coin:
         return spread
-    r = req.get("https://api.coinbase.com/v2/prices/" + coin1 + "-" + coin2 +"/buy")
-    r2 = req.get("https://api.coinbase.com/v2/prices/" + coin1 + "-" + coin2 +"/sell")
+    r2 = req.get("https://api.coinbase.com/v2/prices/" + coin1 + "-" + coin2 +"/buy")
+    r = req.get("https://api.coinbase.com/v2/prices/" + coin1 + "-" + coin2 +"/sell")
     pair = json.loads(r.text)
     #print(pair)
     ask = pair['data']['amount']
