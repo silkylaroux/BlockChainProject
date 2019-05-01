@@ -3,6 +3,9 @@ import requests as req
 import json
 stable_coin = 'DAI'
 
+def get_name():
+    return "ShapeShift"
+
 
 # This returns the ask/bid spread of the coin as it relates to the stable coin of this exchange
 def get_spread(coin1, coin2=stable_coin):
