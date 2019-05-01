@@ -1,7 +1,7 @@
 import numpy as np
 import shapeshift as ss
 # import binanceExchange as be
-# import
+# import coinbase as cb
 import time
 
 
@@ -79,6 +79,7 @@ class ArbitrageTester:
     exchanges = {
         ss: 0,
         # be: 1,
+        # cb: 2,
     }
     ask_data = np.zeros((len(exchanges), len(coins)))
     bid_data = np.zeros((len(exchanges), len(coins)))
