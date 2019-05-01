@@ -1,6 +1,7 @@
 import numpy as np
 import shapeshift as ss
-import binanceExchange as be
+# import binanceExchange as be
+# import
 import time
 
 
@@ -56,7 +57,7 @@ def get_profit(ask_exchange, bid_exchange, coin):
 
 
 def is_profitable(profit):
-    padding = .005
+    padding = .000  # For Now Lets Just Find Any Profit
     return profit > 1 + padding  # Adjust This Number To Add Padding For Mining/Exchange Fees
 
 
@@ -77,7 +78,7 @@ class ArbitrageTester:
     }
     exchanges = {
         ss: 0,
-        be: 1,
+        # be: 1,
     }
     ask_data = np.zeros((len(exchanges), len(coins)))
     bid_data = np.zeros((len(exchanges), len(coins)))
@@ -85,7 +86,6 @@ class ArbitrageTester:
 
     @staticmethod
     def run():
-        update_data()
         last_updated = time.time()
         while True:
             ops = get_arbitrage_opportunities()
@@ -93,7 +93,7 @@ class ArbitrageTester:
                 file = open('Opportunities.txt', 'a')
                 for op in ops:
                     file.write(op)
-            if time.time - last_updated > 120:
+            if time.time() - last_updated > 120:
                 update_data()
                 last_updated = time.time()
 
@@ -103,14 +103,15 @@ class ArbitrageTester:
 
 if __name__ == "__main__":
     at = ArbitrageTester()
-    eth = get_spread(ss, 'ETH')
-    doge = get_spread(ss, 'DOGE')
+    at.run()
+    # eth = get_spread(ss, 'ETH')
+    # doge = get_spread(ss, 'DOGE')
     # print(eth, doge)
-    prof = get_profit(ss, ss, 'ETH')
+    # prof = get_profit(ss, ss, 'ETH')
     # prof = calculate_profit(1.1910, 1.1970515)
-    print(prof)
-    opport = get_arbitrage_opportunities()
-    print(opport)
+    # print(prof)
+    # opport = get_arbitrage_opportunities()
+    # print(opport)
     # print(5000000*prof)
     # print(get_spread(ss, 'ETH'))
     # print(ArbitrageTester.ask_data)
