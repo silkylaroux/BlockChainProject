@@ -1,5 +1,25 @@
 import numpy as np
 import shapeshift as ss
+import binanceExchange as be
+import time
+
+
+def get_arbitrage_opportunities():
+    opportunities = []
+    for ask in ArbitrageTester.exchanges:
+        for bid in ArbitrageTester.exchanges:
+            for coin in ArbitrageTester.coins:
+                profit = get_profit(ask, bid, coin)
+                if is_profitable(profit):
+                    opportunities.append({
+                        'Coin': coin,
+                        'Profit': profit,
+                        'Exchange1': ask.get_name(),
+                        'Exchange2': bid.get_name(),
+                        'Exchange1_Spread': get_spread(ask, coin),
+                        'Exchange2_Spread': get_spread(bid, coin),
+                    })
+    return opportunities
 
 
 # Call This Regularly, Or Create Separate Thread For It Alone
@@ -28,23 +48,22 @@ def get_spread(exchange, coin):
 
 
 # This Retruns The Profit Ratio That Exists From Buying A Currency On Exchange1 And Selling It On Exchange B
-# This Assumes That All Costs (Mining/Exchange) Add Up To 25% Of The Initial Investment
 def get_profit(ask_exchange, bid_exchange, coin):
     ask_exchange_spread = get_spread(ask_exchange, coin)
     bid_exchange_spread = get_spread(bid_exchange, coin)
-    print('Exchange spreads', ask_exchange_spread, bid_exchange_spread)
+    # print('Exchange spreads', ask_exchange_spread, bid_exchange_spread)
     return calculate_profit(ask_exchange_spread['bid'], bid_exchange_spread['ask'])
 
 
 def is_profitable(profit):
-    padding = .004
+    padding = .005
     return profit > 1 + padding  # Adjust This Number To Add Padding For Mining/Exchange Fees
 
 
 def calculate_profit(ask, bid):   # This Takes No Fees Into Account
-    result = ask * 1/bid  # Can Also Do (ask - bid)/bid
-    result = 2 - result   # If you do that change this line to 1 - results
-    print('ROE From Spreads: ', result)
+    result = (ask-bid)/bid
+    result = 1 - result
+    # print('ROE From Spreads: ', result)
     return result
 
 
@@ -58,10 +77,25 @@ class ArbitrageTester:
     }
     exchanges = {
         ss: 0,
+        be: 1,
     }
     ask_data = np.zeros((len(exchanges), len(coins)))
     bid_data = np.zeros((len(exchanges), len(coins)))
     running = True
+
+    @staticmethod
+    def run():
+        update_data()
+        last_updated = time.time()
+        while True:
+            ops = get_arbitrage_opportunities()
+            if len(ops) > 0:
+                file = open('Opportunities.txt', 'a')
+                for op in ops:
+                    file.write(op)
+            if time.time - last_updated > 120:
+                update_data()
+                last_updated = time.time()
 
     def __init__(self, ):
         update_data()
@@ -72,8 +106,11 @@ if __name__ == "__main__":
     eth = get_spread(ss, 'ETH')
     doge = get_spread(ss, 'DOGE')
     # print(eth, doge)
-    # prof = get_profit(ss, ss, 'ETH')
-    prof = calculate_profit(1.1910, 1.1970515)
+    prof = get_profit(ss, ss, 'ETH')
+    # prof = calculate_profit(1.1910, 1.1970515)
+    print(prof)
+    opport = get_arbitrage_opportunities()
+    print(opport)
     # print(5000000*prof)
     # print(get_spread(ss, 'ETH'))
     # print(ArbitrageTester.ask_data)

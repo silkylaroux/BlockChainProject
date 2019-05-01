@@ -6,6 +6,10 @@ from datetime import datetime
 from binance.client import Client
 
 
+def get_name():
+    return "Binance"
+
+
 class binanceExchange(curr.exchange):
     api_key = "jSPb8feugaZVXgl5BdI22FBO3SgzjmXulU5X8tEYyP8InKCrCzJzzSQVT9zqIL2l"
     api_secret = "dwyfKss4wEaWkCzyPxvEoL4CLg4vdsKxSYHxLslJyEOvDVRhX8UURlj3m2r8XPKQ"
