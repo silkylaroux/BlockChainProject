@@ -15,6 +15,8 @@ def get_arbitrage_opportunities():
 #                if profit > highestretun:
 #                    highestretun = profit
                 if is_profitable(profit):
+                    if get_spread(ask, coin)['ask'] == 1:
+                        continue
                     opportunities.append({
                         'Coin': coin,
                         'Profit': profit,
