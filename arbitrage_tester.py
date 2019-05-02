@@ -3,7 +3,7 @@ import shapeshift as ss
 import binanceExchange as be
 import coinbase as cb
 import time
-
+import sys
 
 def get_arbitrage_opportunities():
     opportunities = []
@@ -85,6 +85,7 @@ class ArbitrageTester:
         cb: 1,
         be: 2,
     }
+    filename = ""
     ask_data = np.zeros((len(exchanges), len(coins)))
     bid_data = np.zeros((len(exchanges), len(coins)))
     running = True
@@ -93,18 +94,22 @@ class ArbitrageTester:
     def run():
         last_updated = 0
         while True:
-            if time.time() - last_updated > 60:
+            if time.time() - last_updated > 60 * 10:
                 update_data()
                 ops = get_arbitrage_opportunities()
                 last_updated = time.time()
                 if len(ops) > 0:
-                    file = open('Opportunities.txt', 'a')
+                    file = open(ArbitrageTester.filename, 'a')
                     for op in ops:
-                        file.write(str(op))
+                        file.write(str(op)+ '\n')
+
+    def __init__(self, file):
+        ArbitrageTester.filename = file
 
 
 if __name__ == "__main__":
-    at = ArbitrageTester()
+    file = sys.argv[1]
+    at = ArbitrageTester(file)
     at.run()
     # eth = get_spread(ss, 'ETH')
     # doge = get_spread(ss, 'DOGE')
