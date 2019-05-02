@@ -8,13 +8,9 @@ from binance.client import Client
 def get_name():
     return "Binance"
 
-# I forgot to mention that this needs to be static, so here is the template
-# stablecoin = "DAI"
-# def get_spread(coin1, coin2=stable_coin):
 
 class binanceExchange(curr.exchange):
-    api_key = "jSPb8feugaZVXgl5BdI22FBO3SgzjmXulU5X8tEYyP8InKCrCzJzzSQVT9zqIL2l"
-    api_secret = "dwyfKss4wEaWkCzyPxvEoL4CLg4vdsKxSYHxLslJyEOvDVRhX8UURlj3m2r8XPKQ"
+
     api_key = "mLNccbkPLVx0Y2SgxyjK1UUNDHR5Vkn4NEVD7fPk8IXk5g4o9S4UMURlVNuXoJMC"
     api_secret = "idLU83recXRYrvxGOf5O5H44mG80PkEJCj2loiyd1BYOaisU7KreT16GTEHXt8x1"
     client = Client(api_key, api_secret)
