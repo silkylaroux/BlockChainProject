@@ -1,16 +1,19 @@
 import numpy as np
 import shapeshift as ss
-# import binanceExchange as be
-# import coinbase as cb
+import binanceExchange as be
+import coinbase as cb
 import time
 
 
 def get_arbitrage_opportunities():
     opportunities = []
+#    highestretun = 0
     for ask in ArbitrageTester.exchanges:
         for bid in ArbitrageTester.exchanges:
             for coin in ArbitrageTester.coins:
                 profit = get_profit(ask, bid, coin)
+#                if profit > highestretun:
+#                    highestretun = profit
                 if is_profitable(profit):
                     opportunities.append({
                         'Coin': coin,
@@ -20,6 +23,9 @@ def get_arbitrage_opportunities():
                         'Exchange1_Spread': get_spread(ask, coin),
                         'Exchange2_Spread': get_spread(bid, coin),
                     })
+                    print(opportunities[len(opportunities) - 1])
+#    if len(opportunities) == 0:
+#        print("Highest Return: ", highestretun)
     return opportunities
 
 
@@ -70,16 +76,14 @@ def calculate_profit(ask, bid):   # This Takes No Fees Into Account
 
 class ArbitrageTester:
     coins = {
-        'DAI':  0,
-        'ETH':  1,
-        'DOGE': 2,
-        'XRP':  3,
-        'BTC':  4,
+        'ETH':  0,
+        'XRP':  1,
+        'BTC':  2,
     }
     exchanges = {
         ss: 0,
+        cb: 1,
         # be: 1,
-        # cb: 2,
     }
     ask_data = np.zeros((len(exchanges), len(coins)))
     bid_data = np.zeros((len(exchanges), len(coins)))
@@ -93,8 +97,8 @@ class ArbitrageTester:
             if len(ops) > 0:
                 file = open('Opportunities.txt', 'a')
                 for op in ops:
-                    file.write(op)
-            if time.time() - last_updated > 120:
+                    file.write(str(op))
+            if time.time() - last_updated > 60:
                 update_data()
                 last_updated = time.time()
 
