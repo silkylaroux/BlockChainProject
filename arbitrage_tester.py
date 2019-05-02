@@ -18,10 +18,10 @@ def get_arbitrage_opportunities():
                     opportunities.append({
                         'Coin': coin,
                         'Profit': profit,
-                        'Exchange1': ask.get_name(),
-                        'Exchange2': bid.get_name(),
-                        'Exchange1_Spread': get_spread(ask, coin),
-                        'Exchange2_Spread': get_spread(bid, coin),
+                        'Ask_Exchange': ask.get_name(),
+                        'Bid_Exchange': bid.get_name(),
+                        'Ask_Spread': get_spread(ask, coin),
+                        'Bid': get_spread(bid, coin),
                     })
                     print(opportunities[len(opportunities) - 1])
 #    if len(opportunities) == 0:
@@ -34,7 +34,7 @@ def update_data():
     for exchange in ArbitrageTester.exchanges:
         for coin in ArbitrageTester.coins:
             spread = exchange.get_spread(coin)  # All Exchanges Need To Implement get_spread, buy, and sell Methods
-            print(coin, spread)
+            print(exchange.get_name(), coin, spread)
             ArbitrageTester.ask_data[ArbitrageTester.exchanges[exchange]][ArbitrageTester.coins[coin]] = spread['ask']
             ArbitrageTester.bid_data[ArbitrageTester.exchanges[exchange]][ArbitrageTester.coins[coin]] = spread['bid']
     print("Prices Updated")
@@ -91,19 +91,16 @@ class ArbitrageTester:
 
     @staticmethod
     def run():
-        last_updated = time.time()
+        last_updated = 0
         while True:
-            ops = get_arbitrage_opportunities()
-            if len(ops) > 0:
-                file = open('Opportunities.txt', 'a')
-                for op in ops:
-                    file.write(str(op))
             if time.time() - last_updated > 60:
                 update_data()
+                ops = get_arbitrage_opportunities()
                 last_updated = time.time()
-
-    def __init__(self, ):
-        update_data()
+                if len(ops) > 0:
+                    file = open('Opportunities.txt', 'a')
+                    for op in ops:
+                        file.write(str(op))
 
 
 if __name__ == "__main__":
