@@ -5,7 +5,6 @@ import Currency as curr
 from datetime import datetime
 from binance.client import Client
 
-
 def get_name():
     return "Binance"
 
@@ -13,12 +12,14 @@ def get_name():
 # stablecoin = "DAI"
 # def get_spread(coin1, coin2=stable_coin):
 
-
 class binanceExchange(curr.exchange):
     api_key = "jSPb8feugaZVXgl5BdI22FBO3SgzjmXulU5X8tEYyP8InKCrCzJzzSQVT9zqIL2l"
     api_secret = "dwyfKss4wEaWkCzyPxvEoL4CLg4vdsKxSYHxLslJyEOvDVRhX8UURlj3m2r8XPKQ"
+    api_key = "mLNccbkPLVx0Y2SgxyjK1UUNDHR5Vkn4NEVD7fPk8IXk5g4o9S4UMURlVNuXoJMC"
+    api_secret = "idLU83recXRYrvxGOf5O5H44mG80PkEJCj2loiyd1BYOaisU7KreT16GTEHXt8x1"
     client = Client(api_key, api_secret)
-    prices = client.get_all_tickers()
+    #prices = client.get_all_tickers()
+    prices = ''
     cryptos = client.get_products()
     
     #=================================================================
@@ -42,16 +43,37 @@ class binanceExchange(curr.exchange):
     def buy(self, coin, amount):
         if(self.checkCoinAvailability(coin)):
             try:            
-                order = self.client.create_test_order(
+                order = client.create_test_order(
                     symbol=coin,
-                    side=self.Client.SIDE_BUY,
-                    type=self.Client.ORDER_TYPE_MARKET,
+                    side=Client.SIDE_BUY,
+                    type=Client.ORDER_TYPE_MARKET,
                     quantity=amount)
             except BinanceAPIException as e:
                 print(e)
             else:
                 print("Success")
-   
+                
+    # This returns the ask/bid spread of the coin as it relates to the stable coin of this exchange
+    def get_spread(self, coin1, coin2='USDT'):
+        spread = {
+            'ask': 1,
+            'bid': 1,
+        }
+        
+        coinValTemp1 = self.checkCoinValue(coin1+coin2)
+        coinValTemp2 = self.checkCoinValue(coin2+coin1)
+        
+        if (coinValTemp1 != {}):
+            spread['ask'] = float(coinValTemp1['price'])
+            bid = float(coinValTemp1['price'])
+            spread['bid'] = bid
+        elif (coinValTemp2 != {}):
+            ask = float(coinValTemp2['price'])
+            spread['ask'] = 1/ask
+            spread['bid'] = 1/float(coinValTemp2['price'])
+            
+        return spread
+        
     #TODO            
     def sell(self, coin, amount):
         pass
@@ -64,8 +86,6 @@ class binanceExchange(curr.exchange):
     # Example: checkCoinValue(ETHUSDT)
     def checkCoinValue(self, coin):
         if(self.checkCoinAvailability(coin)):
-            for x in self.prices:
-                if x['symbol'] == coin:
-                    return x['price']
-        return None     
+            return self.client.get_symbol_ticker(symbol=coin)
+        return {}    
    
