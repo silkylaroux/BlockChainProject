@@ -79,6 +79,12 @@ class ArbitrageTester:
         'ETH':  0,
         'XRP':  1,
         'BTC':  2,
+        'BCH':  3,
+        'LTC':  4,
+        'ETC':  5,
+        'ZEC':  6,
+        'REP':  7,
+        'ZRX':  8,
     }
     exchanges = {
         ss: 0,
