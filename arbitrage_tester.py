@@ -83,7 +83,7 @@ class ArbitrageTester:
     exchanges = {
         ss: 0,
         cb: 1,
-        # be: 1,
+        be: 2,
     }
     ask_data = np.zeros((len(exchanges), len(coins)))
     bid_data = np.zeros((len(exchanges), len(coins)))
