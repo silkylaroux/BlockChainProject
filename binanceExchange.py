@@ -9,6 +9,28 @@ def get_name():
     return "Binance"
 
 
+# This returns the ask/bid spread of the coin as it relates to the stable coin of this exchange
+def get_spread(coin1, coin2='USDT'):
+    be = binanceExchange()
+    spread = {
+        'ask': 1,
+        'bid': 1,
+    }
+
+    coinValTemp1 = be.checkCoinValue(coin1 + coin2)
+    coinValTemp2 = be.checkCoinValue(coin2 + coin1)
+    if (coinValTemp1 != {}):
+        spread['ask'] = float(coinValTemp1['price'])
+        bid = float(coinValTemp1['price'])
+        spread['bid'] = bid
+    elif (coinValTemp2 != {}):
+        ask = float(coinValTemp2['price'])
+        spread['ask'] = 1 / ask
+        spread['bid'] = 1 / float(coinValTemp2['price'])
+
+    return spread
+
+
 class binanceExchange(curr.exchange):
 
     api_key = "mLNccbkPLVx0Y2SgxyjK1UUNDHR5Vkn4NEVD7fPk8IXk5g4o9S4UMURlVNuXoJMC"
@@ -48,28 +70,7 @@ class binanceExchange(curr.exchange):
                 print(e)
             else:
                 print("Success")
-                
-    # This returns the ask/bid spread of the coin as it relates to the stable coin of this exchange
-    def get_spread(self, coin1, coin2='USDT'):
-        spread = {
-            'ask': 1,
-            'bid': 1,
-        }
-        
-        coinValTemp1 = self.checkCoinValue(coin1+coin2)
-        coinValTemp2 = self.checkCoinValue(coin2+coin1)
-        
-        if (coinValTemp1 != {}):
-            spread['ask'] = float(coinValTemp1['price'])
-            bid = float(coinValTemp1['price'])
-            spread['bid'] = bid
-        elif (coinValTemp2 != {}):
-            ask = float(coinValTemp2['price'])
-            spread['ask'] = 1/ask
-            spread['bid'] = 1/float(coinValTemp2['price'])
-            
-        return spread
-        
+
     #TODO            
     def sell(self, coin, amount):
         pass
