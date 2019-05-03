@@ -17,8 +17,15 @@ def get_spread(coin1, coin2='USDT'):
         'bid': 1,
     }
 
-    coinValTemp1 = be.checkCoinValue(coin1 + coin2)
-    coinValTemp2 = be.checkCoinValue(coin2 + coin1)
+    if (coin1 == 'BCH'):
+        coin1 = 'BCHABC'
+    if(coin1 == 'REP'):
+        tempPrice = float(be.checkCoinValue('ETHUSDT')['price']) * float(be.checkCoinValue('REPETH')['price'])
+        coinValTemp1 ={'symbol': 'REPUSDT', 'price': tempPrice}
+    else:
+        coinValTemp1 = be.checkCoinValue(coin1 + coin2)
+        coinValTemp2 = be.checkCoinValue(coin2 + coin1)
+
     if (coinValTemp1 != {}):
         spread['ask'] = float(coinValTemp1['price'])
         bid = float(coinValTemp1['price'])
