@@ -15,6 +15,8 @@ def get_arbitrage_opportunities():
 #                if profit > highestretun:
 #                    highestretun = profit
                 if is_profitable(profit):
+                    if get_spread(ask, coin)['ask'] == 1:
+                        continue
                     opportunities.append({
                         'Coin': coin,
                         'Profit': profit,
@@ -100,6 +102,7 @@ class ArbitrageTester:
     def run():
         last_updated = 0
         while True:
+            time.sleep(30)
             if time.time() - last_updated > 60 * 10:
                 update_data()
                 ops = get_arbitrage_opportunities()
