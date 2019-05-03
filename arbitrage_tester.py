@@ -102,6 +102,7 @@ class ArbitrageTester:
     def run():
         last_updated = 0
         while True:
+            time.sleep(30)
             if time.time() - last_updated > 60 * 10:
                 update_data()
                 ops = get_arbitrage_opportunities()
