@@ -47,6 +47,23 @@ def getProfitMeans():
     tempDict['REP Mean Profit'] = np.mean(profit[10::11])
     return tempDict
 
+def getProfitStdev():
+    tempDict = {}
+    profit = getProfit()
+    tempDict['Full std Dev'] = np.std(np.array(profit))
+    tempDict['ETH std Dev'] = np.std(np.array(profit[::11]))
+    tempDict['XRP std Dev'] = np.std(np.array(profit[1::11]))
+    tempDict['BTC std Dev'] = np.std(np.array(profit[2::11]))
+    tempDict['LTC std Dev'] = np.std(np.array(profit[3::11]))
+    tempDict['ETC std Dev'] = np.std(np.array(profit[4::11]))
+    tempDict['ZEC std Dev'] = np.std(np.array(profit[5::11]))
+    tempDict['ZRX std Dev'] = np.std(np.array(profit[6::11]))
+    tempDict['BCH std Dev BinSS'] = np.std(np.array(profit[7::11]))
+    tempDict['REP std Dev BinSS'] = np.std(np.array(profit[8::11]))
+    tempDict['BCH std Dev'] = np.std(np.array(profit[9::11]))
+    tempDict['REP std Dev'] = np.std(np.array(profit[10::11]))
+    return tempDict
+
 def getAskSpread():
     return getInfo('Ask_Spread')
 
@@ -86,4 +103,7 @@ if __name__ == '__main__':
 	lines = readFile(file)
 	fixReading()
 	pprint.pprint(getProfitMaxMin())
+	print()
 	pprint.pprint(getProfitMeans())
+	print()
+	pprint.pprint(getProfitStdev())
